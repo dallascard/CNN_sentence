@@ -260,7 +260,7 @@ def get_idx_from_sent(sent, word_idx_map, max_l=51, k=300, filter_h=5):
     for i in xrange(pad):
         x.append(0)
     words = sent.split()
-    for word in words:
+    for word in words[:max_l]:
         if word in word_idx_map:
             x.append(word_idx_map[word])
     while len(x) < max_l+2*pad:
@@ -273,20 +273,21 @@ def make_idx_data_cv(revs, word_idx_map, cv, max_l=51, k=300, filter_h=5):
     """
     train, test = [], []
     for rev in revs:
-        sent = get_idx_from_sent(rev["text"], word_idx_map, max_l, k, filter_h)   
+        sent = get_idx_from_sent(rev["text"], word_idx_map, max_l, k, filter_h)
         sent.append(rev["y"])
-        if rev["split"]==cv:            
+        if rev["split"] == cv:
             test.append(sent)        
         else:  
-            train.append(sent)   
-    train = np.array(train,dtype="int")
-    test = np.array(test,dtype="int")
+            train.append(sent)
+    train = np.array(train, dtype="int")
+    print train.shape
+    test = np.array(test, dtype="int")
     return [train, test]     
   
    
 if __name__=="__main__":
     print "loading data...",
-    x = cPickle.load(open("mr.p","rb"))
+    x = cPickle.load(open("Econ.p","rb"))
     revs, W, W2, word_idx_map, vocab = x[0], x[1], x[2], x[3], x[4]
     print "data loaded!"
     mode= sys.argv[1]
@@ -307,7 +308,8 @@ if __name__=="__main__":
     results = []
     r = range(0,10)    
     for i in r:
-        datasets = make_idx_data_cv(revs, word_idx_map, i, max_l=56,k=300, filter_h=5)
+        print i
+        datasets = make_idx_data_cv(revs, word_idx_map, i, max_l=248, k=300, filter_h=5)
         perf = train_conv_net(datasets,
                               U,
                               lr_decay=0.95,

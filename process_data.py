@@ -3,6 +3,8 @@ import cPickle
 from collections import defaultdict
 import sys, re
 import pandas as pd
+import codecs
+import json
 
 def build_data_cv(data_folder, cv=10, clean_string=True):
     """
@@ -123,15 +125,21 @@ def clean_str_sst(string):
     return string.strip().lower()
 
 if __name__=="__main__":    
-    w2v_file = sys.argv[1]     
-    data_folder = ["rt-polarity.pos","rt-polarity.neg"]    
+    w2v_file = sys.argv[1]
+    label = sys.argv[2]
+    #data_folder = ["rt-polarity.pos","rt-polarity.neg"]
+    #data_folder = ["Economic_labels.pos","Economic_labels.neg"]
+    data_folder = [label + '.pos', label + '.neg']
     print "loading data...",        
     revs, vocab = build_data_cv(data_folder, cv=10, clean_string=True)
-    max_l = np.max(pd.DataFrame(revs)["num_words"])
+    max_l = np.max(pd.DataFrame(revs)["num_words"])    
     print "data loaded!"
     print "number of sentences: " + str(len(revs))
     print "vocab size: " + str(len(vocab))
     print "max sentence length: " + str(max_l)
+    print "writing cross-validation data split to json"
+    with codecs.open('cv.json', 'w', encoding='utf-8') as output_file:
+        json.dump(revs, output_file, encoding='utf-8', indent=2)
     print "loading word2vec vectors...",
     w2v = load_bin_vec(w2v_file, vocab)
     print "word2vec loaded!"
