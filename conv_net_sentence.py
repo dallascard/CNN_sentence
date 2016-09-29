@@ -291,8 +291,8 @@ if __name__=="__main__":
     x = cPickle.load(open(label + ".p","rb"))
     revs, W, W2, word_idx_map, vocab = x[0], x[1], x[2], x[3], x[4]
     print "data loaded!"
-    mode= sys.argv[1]
-    word_vectors = sys.argv[2]    
+    mode= sys.argv[2]
+    word_vectors = sys.argv[3]
     if mode=="-nonstatic":
         print "model architecture: CNN-non-static"
         non_static=True
