@@ -149,6 +149,6 @@ if __name__=="__main__":
     rand_vecs = {}
     add_unknown_words(rand_vecs, vocab)
     W2, _ = get_W(rand_vecs)
-    cPickle.dump([revs, W, W2, word_idx_map, vocab], open("mr.p", "wb"))
+    cPickle.dump([revs, W, W2, word_idx_map, vocab], open(label + ".p", "wb"))
     print "dataset created!"
     

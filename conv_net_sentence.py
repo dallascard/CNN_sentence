@@ -286,8 +286,9 @@ def make_idx_data_cv(revs, word_idx_map, cv, max_l=51, k=300, filter_h=5):
   
    
 if __name__=="__main__":
+    label = sys.argv[1]
     print "loading data...",
-    x = cPickle.load(open("Econ.p","rb"))
+    x = cPickle.load(open(label + ".p","rb"))
     revs, W, W2, word_idx_map, vocab = x[0], x[1], x[2], x[3], x[4]
     print "data loaded!"
     mode= sys.argv[1]
